@@ -23,7 +23,7 @@
 %%%===================================================================
 
 start_link() ->
-  gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+  gen_server:start_link({local, ?StorageNode}, ?MODULE, [], []).
 
 init([]) ->
   {ok, #state{requests = 0}}.

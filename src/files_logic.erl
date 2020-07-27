@@ -9,7 +9,7 @@
 -module(files_logic).
 -author("asorg").
 
--export([read_file/2, split_to_chunks/3, save_to_disk/3,combine_chunks/2, delete_file/2]).
+-export([read_file/2, split_to_chunks/3, save_to_disk/3,combine_chunks/3, delete_file/2]).
 
 
 %@read file
@@ -44,16 +44,14 @@ save_chunks(FileName, Bin, PartNo) ->
   save_chunks(tl(Bin), FileName, PartNo + 1).
 
 %Combining parts to single file
-
-combine_chunks(FileName,ChunksNum) ->
-  combine_chunks(FileName, ChunksNum, []).
-
-combine_chunks(FileName,0,Acc) ->
-  file:write_file(FileName, list_to_binary(lists:reverse(Acc)));
-combine_chunks(FileName, ChunksNum, Acc) ->
-  PartName = FileName ++ "." ++ "part" ++ integer_to_list(ChunksNum - 1),
+combine_chunks(FileName,ChunksNum, Path) ->
+  combine_chunks(FileName, ChunksNum, [], Path).
+combine_chunks(FileName, 0, Acc, Path) ->
+  file:write_file(Path ++ FileName, list_to_binary(lists:reverse(Acc)));
+combine_chunks(FileName, ChunksNum, Acc, Path) ->
+  PartName = Path ++ FileName ++ "." ++ "part" ++ integer_to_list(ChunksNum - 1),
   {ok, Bin} = file:read_file(PartName),
-  combine_chunks(FileName, ChunksNum-1, Acc++[Bin]).
+  combine_chunks(FileName, ChunksNum-1, Acc++[Bin], Path).
 
 %@delete file
 delete_file(FileName, Path) ->

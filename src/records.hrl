@@ -8,8 +8,9 @@
 %%%-------------------------------------------------------------------
 -author("asorg").
 
--define(SERVER, ?MODULE).
+-define(StorageNode, storage_node).
 -define(LocalDB_folder, "localDB/").
+-define(Downloads_folder, "downloads/").
 -define(LocalDB, localDB).
 -define(GlobalDB, globalDB).
 -define(TopologyDB, topologyDB).

@@ -3,7 +3,7 @@
 %% @end
 %%%-------------------------------------------------------------------
 
--module(dss_sup).
+-module(dss_storage_sup).
 
 -behaviour(supervisor).
 
@@ -14,7 +14,7 @@
 -define(SERVER, ?MODULE).
 
 start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
 %% sup_flags() = #{strategy => strategy(),         % optional
 %%                 intensity => non_neg_integer(), % optional
@@ -25,11 +25,16 @@ start_link() ->
 %%                  shutdown => shutdown(), % optional
 %%                  type => worker(),       % optional
 %%                  modules => modules()}   % optional
-init([]) ->
-    SupFlags = #{strategy => one_for_all,
-                 intensity => 0,
-                 period => 1},
-    ChildSpecs = [],
-    {ok, {SupFlags, ChildSpecs}}.
 
-%% internal functions
+init([]) ->
+  SupFlags = #{strategy => one_for_one,
+    intensity => 0,
+    period => 1},
+  ChildSpecs = [{storage_node,
+    {storage_genserver, start_link,[]},
+    permanent, 2000,
+    worker,
+    [files_logic,proxy_genserver_calls]}],
+  {ok, {SupFlags, ChildSpecs}}.
+
+

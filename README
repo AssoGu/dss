@@ -1,23 +1,18 @@
 Init:
 On proxy node:
-1)mnesia:Create_schema([node()])
-2)mnesia:start()
-3)database_logic:initDB()
-4)proxy_genserver:start_link();
+1) call dss_app:start(proxy,0)
 
 On storage nodes:
-1)storage_genserver:start_link();
-2)net_adm:ping(proxy_address);
+1) call dss_app:start(storage,"proxy server ip")
 
 
 Flow - upload/downloading from/to another storage node,
 Pick one storage node
 1)storage_logic:upload(FileName) to upload file, for now - make sure file is in ?LocalDBFolder
+2)storage_logic:download(FileName) to download file, make sure folder ?Download_folder created.
 
 
-to do -
-add monitoring on added nodes, when they exist we have to update the ring.
-
+to do - we need to create a reference to server PID and not use the actual PID, becuase the PID change every time we reset the node.
 
 
 

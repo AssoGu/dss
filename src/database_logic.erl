@@ -20,8 +20,7 @@
 %%@ Global Databases, needed to be called from supervisor node only.
 
 initDB()->
-  mnesia:create_table(?GlobalDB, [{disc_copies, [node()]},{type, set},{attributes, record_info(fields,?GlobalDB)}]),
-  mnesia:create_table(?TopologyDB, [{disc_copies, [node()]},{type, set},{attributes, record_info(fields, ?TopologyDB)}]).
+  mnesia:create_table(?GlobalDB, [{disc_copies, [node()]},{type, set},{attributes, record_info(fields,?GlobalDB)}]).
 
 %%%==============================================================
 %%% Global Database API
